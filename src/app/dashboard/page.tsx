@@ -8,7 +8,7 @@ import Link from 'next/link';
 const phrases = ['Enter your prompt here...', 'Enter your text here...'];
 
 export default function Dashboard() {
-  const [inputValue, setInputValue] = useState('');
+  const [inputValue, setInputValue] = useState<string>(''); // Typed fix
   const [placeholderText, setPlaceholderText] = useState('');
   const [isFocused, setIsFocused] = useState(false);
   const router = useRouter();
@@ -47,16 +47,10 @@ export default function Dashboard() {
 
     const previousRaw = JSON.parse(localStorage.getItem('prompt_history') || '[]');
 
-    type PromptItem = { original: string; refined: string };
-    const previous = (previousRaw as PromptItem[]).map((item) => {
-      if (typeof item === 'string') {
-        return {
-          original: item,
-          refined: `Refined: ${item.trim().replace(/a ai/g, 'an AI')}`,
-        };
-      }
-      return item;
-    });
+    const previous = (previousRaw as string[]).map((item) => ({
+      original: item,
+      refined: `Refined: ${item.trim().replace(/a ai/g, 'an AI')}`,
+    }));
 
     const newEntry = {
       original: inputValue,
