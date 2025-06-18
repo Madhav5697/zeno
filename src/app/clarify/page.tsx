@@ -3,6 +3,8 @@
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState, useRef } from 'react';
 
+const phrases = ['Your answer here...', 'Enter your idea...'];
+
 export default function ClarifyPage() {
   const searchParams = useSearchParams();
   const prompt = searchParams.get('prompt') || '';
@@ -13,7 +15,6 @@ export default function ClarifyPage() {
   const [finalPrompt, setFinalPrompt] = useState('');
   const [generating, setGenerating] = useState(false);
 
-  const phrases = ['Your answer here...', 'Enter your idea...'];
   const [placeholderText, setPlaceholderText] = useState(phrases[0]);
   const [placeholderIndex, setPlaceholderIndex] = useState(0);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
@@ -53,7 +54,7 @@ export default function ClarifyPage() {
       setPlaceholderIndex((prev) => (prev + 1) % phrases.length);
     }, 3000);
     return () => clearInterval(interval);
-  }, []);
+  }, [phrases.length]); // ✅ FIXED: now included
 
   useEffect(() => {
     let charIndex = 0;
@@ -101,7 +102,6 @@ export default function ClarifyPage() {
   const handleSubmit = async () => {
     const missing = answers.map((a) => a.trim() === '');
     setErrors(missing);
-
     if (missing.includes(true)) return;
 
     setGenerating(true);
@@ -165,13 +165,12 @@ export default function ClarifyPage() {
                   }}
                 >
                   <div className="glow-inner transition-transform duration-300 ease-out">
-                    <div className="mb-4 text-lg sm:text-xl font-medium leading-relaxed text-white">
-                      {q}
-                    </div>
+                    <div className="mb-4 text-lg sm:text-xl font-medium leading-relaxed text-white">{q}</div>
                     <div className="relative">
                       {answers[idx] === '' && !isFocusedArray[idx] && (
                         <span className="absolute top-[13px] left-[20px] text-white/50 pointer-events-none z-10">
-                          {placeholderText}<span className="animate-blink">|</span>
+                          {placeholderText}
+                          <span className="animate-blink">|</span>
                         </span>
                       )}
                       <input

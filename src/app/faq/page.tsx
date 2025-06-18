@@ -2,7 +2,12 @@
 
 import { useState } from 'react';
 
-const faqs = [
+interface FAQ {
+  question: string;
+  answer: string;
+}
+
+const faqs: FAQ[] = [
   {
     question: 'What is Prompt Refiner?',
     answer:
@@ -49,7 +54,9 @@ export default function FAQPage() {
               <h2 className="text-xl font-semibold">{faq.question}</h2>
               <p
                 className={`text-white/80 mt-3 transition-all duration-300 ${
-                  openIndex === index ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0 overflow-hidden'
+                  openIndex === index
+                    ? 'max-h-[500px] opacity-100'
+                    : 'max-h-0 opacity-0 overflow-hidden'
                 }`}
               >
                 {faq.answer}

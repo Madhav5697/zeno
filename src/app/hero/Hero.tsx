@@ -3,7 +3,7 @@
 export default function HeroSection() {
   return (
     <section className="relative w-full min-h-screen flex flex-col justify-center items-center text-center px-6 sm:px-8 pt-52 pb-32 bg-gradient-to-br from-black to-[#0b0b0b] text-white overflow-visible">
-    <div className="absolute w-[400px] h-[400px] bg-purple-500 rounded-full blur-3xl opacity-20 -z-10 top-10 left-1/2 transform -translate-x-1/2 animate-blob" />
+      <div className="absolute w-[400px] h-[400px] bg-purple-500 rounded-full blur-3xl opacity-20 -z-10 top-10 left-1/2 transform -translate-x-1/2 animate-blob" />
 
       {/* Main Content */}
       <div className="opacity-0 translate-y-4 animate-fade-up">

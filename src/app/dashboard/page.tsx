@@ -3,14 +3,16 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import HeroSection from '../hero/Hero';
+import Link from 'next/link';
+
+// ✅ moved outside for useEffect safety
+const phrases = ['Enter your prompt here...', 'Enter your text here...'];
 
 export default function Dashboard() {
   const [inputValue, setInputValue] = useState('');
   const [placeholderText, setPlaceholderText] = useState('');
   const [isFocused, setIsFocused] = useState(false);
   const router = useRouter();
-
-  const phrases = ['Enter your prompt here...', 'Enter your text here...'];
 
   useEffect(() => {
     if (isFocused) return;
@@ -40,13 +42,14 @@ export default function Dashboard() {
     return () => clearInterval(interval);
   }, [isFocused]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!inputValue.trim()) return;
 
     const previousRaw = JSON.parse(localStorage.getItem('prompt_history') || '[]');
 
-    const previous = previousRaw.map((item: any) => {
+    type PromptItem = { original: string; refined: string };
+    const previous = (previousRaw as PromptItem[]).map((item) => {
       if (typeof item === 'string') {
         return {
           original: item,
@@ -70,14 +73,14 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-black to-[#111111] text-white">
+      {/* Header */}
       <header className="w-full px-6 sm:px-12 py-5 flex justify-between items-center bg-black/30 backdrop-blur-md fixed top-0 z-50 border-b border-white/10 animate-fade-down shadow-sm transition-all duration-700">
         <nav className="flex space-x-6 text-white/80 text-sm font-medium">
-          <a href="/dashboard" className="hover:text-white transition">Home</a>
-          <a href="/faq" className="hover:text-white transition">FAQ</a>
-          <a href="/terms" className="hover:text-white transition">Terms</a>
-          <a href="/history" className="hover:text-white transition font-semibold">History</a>
+          <Link href="/dashboard" className="hover:text-white transition">Home</Link>
+          <Link href="/faq" className="hover:text-white transition">FAQ</Link>
+          <Link href="/terms" className="hover:text-white transition">Terms</Link>
+          <Link href="/history" className="hover:text-white transition font-semibold">History</Link>
         </nav>
-
         <div className="text-white text-sm font-medium">
           Welcome, <span className="font-semibold text-purple-400">Madhav</span>
         </div>
@@ -85,6 +88,7 @@ export default function Dashboard() {
 
       <HeroSection />
 
+      {/* Prompt Input Box */}
       <main className="flex flex-col items-center justify-center px-6 sm:px-10 pb-32 pt-10">
         <div
           className="max-w-4xl w-full"
@@ -132,7 +136,7 @@ export default function Dashboard() {
       </main>
 
       <div className="text-center text-sm sm:text-base text-purple-300 font-light mt-16 px-4 sm:px-0">
-        kya dekhraha hein bey, it's end of the website — enter your prompt in the box.
+        kya dekhraha hein bey, it&apos;s end of the website — enter your prompt in the box.
       </div>
 
       <footer className="w-full text-center text-white/70 text-sm py-8 border-t border-white/10 mt-10 px-4 sm:px-0">
