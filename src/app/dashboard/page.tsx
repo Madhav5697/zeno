@@ -8,15 +8,14 @@ import Link from 'next/link';
 const phrases = ['Enter your prompt here...', 'Enter your text here...'];
 
 export default function Dashboard() {
-  const [inputValue, setInputValue] = useState<string>(''); // Typed fix
+  const [inputValue, setInputValue] = useState<string>('');
   const [placeholderText, setPlaceholderText] = useState('');
   const [isFocused, setIsFocused] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
     if (isFocused) return;
-    let index = 0;
-    let subIndex = 0;
+    let index = 0, subIndex = 0;
     let isDeleting = false;
 
     const interval = setInterval(() => {
@@ -67,8 +66,8 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-black to-[#111111] text-white">
       {/* Header */}
-      <header className="w-full px-6 sm:px-12 py-5 flex justify-between items-center bg-black/30 backdrop-blur-md fixed top-0 z-50 border-b border-white/10 animate-fade-down shadow-sm transition-all duration-700">
-        <nav className="flex space-x-6 text-white/80 text-sm font-medium">
+      <header className="w-full px-4 sm:px-8 py-4 flex justify-between items-center bg-black/30 backdrop-blur-md fixed top-0 z-50 border-b border-white/10 shadow-sm animate-fade-down">
+        <nav className="flex space-x-4 text-white/80 text-sm font-medium">
           <Link href="/dashboard" className="hover:text-white transition">Home</Link>
           <Link href="/faq" className="hover:text-white transition">FAQ</Link>
           <Link href="/terms" className="hover:text-white transition">Terms</Link>
@@ -81,8 +80,8 @@ export default function Dashboard() {
 
       <HeroSection />
 
-      {/* Prompt Input Box */}
-      <main className="flex flex-col items-center justify-center px-6 sm:px-10 pb-32 pt-10">
+      {/* Prompt Input */}
+      <main className="flex flex-col items-center justify-center px-4 sm:px-8 pt-10 pb-24 sm:pb-36">
         <div
           className="max-w-4xl w-full"
           onMouseMove={(e) => {
@@ -90,15 +89,13 @@ export default function Dashboard() {
             const rect = e.currentTarget.getBoundingClientRect();
             const x = e.clientX - rect.left;
             const y = e.clientY - rect.top;
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
-            const rotateX = ((y - centerY) / centerY) * 6;
-            const rotateY = ((x - centerX) / centerX) * -6;
+            const rotateX = ((y - rect.height / 2) / rect.height / 2) * 6;
+            const rotateY = ((x - rect.width / 2) / rect.width / 2) * -6;
             card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.01)`;
           }}
           onMouseLeave={(e) => {
             const card = e.currentTarget.querySelector('.glow-inner') as HTMLDivElement;
-            card.style.transform = `rotateX(0deg) rotateY(0deg) scale(1)`;
+            card.style.transform = 'rotateX(0deg) rotateY(0deg) scale(1)';
           }}
         >
           <div className="glow-border animate-popup transition duration-500 ease-in-out">

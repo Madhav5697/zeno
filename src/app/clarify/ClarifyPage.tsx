@@ -126,28 +126,32 @@ export default function ClarifyPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-black to-[#111111] text-white px-6 sm:px-10 py-40">
-      <h1 className="text-4xl font-bold text-center mb-12 animate-fade-down">Clarify Your Prompt</h1>
+    <div className="min-h-screen bg-gradient-to-br from-black to-[#111111] text-white px-4 sm:px-8 py-28 sm:py-36">
+      <h1 className="text-3xl sm:text-4xl font-bold text-center mb-10 sm:mb-14 animate-fade-down">
+        Clarify Your Prompt
+      </h1>
 
       {loading ? (
         <p className="text-center text-white/70 animate-pulse">Thinking...</p>
       ) : (
         <>
           <div className="max-w-2xl mx-auto text-center">
-            <p className="text-white/90 mb-4 text-lg">Your original prompt:</p>
-            <div className="bg-white/10 p-5 rounded-xl border border-white/10 text-white mb-12 text-lg">
+            <p className="text-white/90 mb-4 text-base sm:text-lg">Your original prompt:</p>
+            <div className="bg-white/10 p-4 sm:p-5 rounded-xl border border-white/10 text-white mb-10 text-sm sm:text-base">
               {prompt}
             </div>
           </div>
 
           {questions.length > 0 ? (
             <div className="max-w-3xl mx-auto space-y-8">
-              <h2 className="text-2xl sm:text-3xl font-semibold mb-6 text-center animate-fade-down">Follow-up Questions</h2>
+              <h2 className="text-xl sm:text-3xl font-semibold mb-4 text-center animate-fade-down">
+                Follow-up Questions
+              </h2>
 
               {questions.map((q, idx) => (
                 <div
                   key={idx}
-                  className="glow-border animate-popup transition-transform duration-300 ease-in-out"
+                  className="glow-border animate-popup"
                   onMouseMove={(e) => {
                     const card = e.currentTarget.querySelector('.glow-inner') as HTMLDivElement;
                     const rect = e.currentTarget.getBoundingClientRect();
@@ -165,7 +169,7 @@ export default function ClarifyPage() {
                   }}
                 >
                   <div className="glow-inner transition-transform duration-300 ease-out">
-                    <div className="mb-4 text-lg sm:text-xl font-medium leading-relaxed text-white">{q}</div>
+                    <div className="mb-4 text-base sm:text-xl font-medium leading-relaxed text-white">{q}</div>
                     <div className="relative">
                       {answers[idx] === '' && !isFocusedArray[idx] && (
                         <span className="absolute top-[13px] left-[20px] text-white/50 pointer-events-none z-10">
@@ -182,7 +186,7 @@ export default function ClarifyPage() {
                         onFocus={() => handleFocus(idx)}
                         onBlur={() => handleBlur(idx)}
                         onChange={(e) => handleInputChange(idx, e.target.value)}
-                        className="glass-input relative z-20"
+                        className="glass-input w-full relative z-20"
                       />
                       {errors[idx] && (
                         <p className="text-red-400 mt-2 text-sm">This field is required.</p>
@@ -192,7 +196,7 @@ export default function ClarifyPage() {
                 </div>
               ))}
 
-              <div className="mt-10">
+              <div className="mt-8">
                 <button
                   type="button"
                   className="glass-button gradient-button w-full"
@@ -216,8 +220,8 @@ export default function ClarifyPage() {
 
           {finalPrompt && (
             <div className="max-w-3xl mx-auto mt-12 p-6 rounded-xl bg-white/10 border border-white/10 text-white">
-              <h3 className="text-xl font-semibold mb-2">Final Refined Prompt:</h3>
-              <p className="whitespace-pre-line text-white/90">{finalPrompt}</p>
+              <h3 className="text-lg sm:text-xl font-semibold mb-2">Final Refined Prompt:</h3>
+              <p className="whitespace-pre-line text-white/90 text-sm sm:text-base">{finalPrompt}</p>
               <button
                 className="mt-4 px-4 py-2 bg-white/10 text-white rounded-lg border border-white/20 hover:bg-white/20 transition"
                 onClick={() => navigator.clipboard.writeText(finalPrompt)}
