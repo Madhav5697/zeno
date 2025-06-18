@@ -49,8 +49,9 @@ Prompt:
 
     const questions = raw
       .split(/(?:\r?\n|\s*)?\d+\.\s+/g)
-      .map(q => q.trim())
-      .filter(q => q.length > 0);
+      .map((q: string) => q.trim())
+      .filter((q: string) => q.length > 0);
+
 
     return NextResponse.json({ questions });
   } catch (error) {
