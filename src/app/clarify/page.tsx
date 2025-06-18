@@ -54,7 +54,7 @@ export default function ClarifyPage() {
       setPlaceholderIndex((prev) => (prev + 1) % phrases.length);
     }, 3000);
     return () => clearInterval(interval);
-  }, [phrases.length]); // ✅ FIXED: now included
+  }, [phrases.length]);
 
   useEffect(() => {
     let charIndex = 0;
@@ -174,7 +174,9 @@ export default function ClarifyPage() {
                         </span>
                       )}
                       <input
-                        ref={(el) => (inputRefs.current[idx] = el)}
+                        ref={(el: HTMLInputElement | null) => {
+                          inputRefs.current[idx] = el;
+                        }}
                         type="text"
                         value={answers[idx]}
                         onFocus={() => handleFocus(idx)}
