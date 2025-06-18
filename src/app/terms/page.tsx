@@ -2,7 +2,7 @@ export default function TermsPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-black to-[#111111] text-white px-6 sm:px-10 py-40">
       <h1 className="text-4xl font-bold text-center mb-12 animate-fade-down">
-        Terms & Conditions
+        Terms &amp; Conditions
       </h1>
 
       <div className="max-w-3xl mx-auto glass-container space-y-8 text-white/90 leading-relaxed text-sm sm:text-base">

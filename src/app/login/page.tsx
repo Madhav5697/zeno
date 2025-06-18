@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { createClient } from '@supabase/supabase-js';
 import Toast from '../../../components/Toast';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/solid';
+import Link from 'next/link';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -19,7 +20,7 @@ export default function LoginPage() {
   const [showToast, setShowToast] = useState(false);
   const router = useRouter();
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const { error } = await supabase.auth.signInWithPassword({ email, password });
@@ -38,18 +39,22 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-black to-[#111111]">
+      {/* Header */}
       <header className="w-full px-6 sm:px-12 py-5 flex justify-between items-center bg-black/30 backdrop-blur-md fixed top-0 z-50 border-b border-white/10 animate-fade-down shadow-sm">
         <nav className="flex space-x-6 text-white/80 text-sm font-medium">
-          <a href="/">Home</a>
-          <a href="#">FAQ</a>
-          <a href="#">Terms</a>
+          <Link href="/" className="hover:text-white transition">Home</Link>
+          <Link href="/faq" className="hover:text-white transition">FAQ</Link>
+          <Link href="/terms" className="hover:text-white transition">Terms</Link>
         </nav>
         <div className="flex space-x-4">
           <button className="px-4 py-2 text-sm text-white border border-white/20 rounded hover:bg-white/10">Login</button>
-          <a href="/signup" className="px-4 py-2 text-sm text-black bg-white rounded hover:bg-gray-200">Sign Up</a>
+          <Link href="/signup" className="px-4 py-2 text-sm text-black bg-white rounded hover:bg-gray-200">
+            Sign Up
+          </Link>
         </div>
       </header>
 
+      {/* Login Form */}
       <main className="flex items-center justify-center pt-40 pb-24 px-6 sm:px-10">
         <div className="glow-border w-full max-w-md">
           <div className="glow-inner">
@@ -90,8 +95,10 @@ export default function LoginPage() {
             </form>
 
             <p className="text-sm text-white/50 text-center mt-6">
-              Don't have an account?{' '}
-              <a href="/signup" className="text-white underline hover:text-cyan-400">Sign up</a>
+              Don&apos;t have an account?{' '}
+              <Link href="/signup" className="text-white underline hover:text-cyan-400">
+                Sign up
+              </Link>
             </p>
           </div>
         </div>

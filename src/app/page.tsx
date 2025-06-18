@@ -2,7 +2,11 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import HeroSection from './hero/Hero';
+
+// ✅ Moved phrases outside to prevent dependency warnings
+const phrases = ['Enter your prompt here...', 'Enter your text here...'];
 
 export default function Home() {
   const [inputValue, setInputValue] = useState('');
@@ -10,10 +14,9 @@ export default function Home() {
   const [isFocused, setIsFocused] = useState(false);
   const router = useRouter();
 
-  const phrases = ['Enter your prompt here...', 'Enter your text here...'];
-
   useEffect(() => {
     if (isFocused) return;
+
     let index = 0;
     let subIndex = 0;
     let isDeleting = false;
@@ -38,9 +41,9 @@ export default function Home() {
     }, 100);
 
     return () => clearInterval(interval);
-  }, [isFocused]);
+  }, [isFocused]); // ✅ Only watching isFocused now
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!inputValue.trim()) return;
     const encodedPrompt = encodeURIComponent(inputValue);
@@ -52,17 +55,17 @@ export default function Home() {
       {/* Header */}
       <header className="w-full px-6 sm:px-12 py-5 flex justify-between items-center bg-black/30 backdrop-blur-md fixed top-0 z-50 border-b border-white/10 animate-fade-down shadow-sm transition-all duration-700">
         <nav className="flex space-x-6 text-white/80 text-sm font-medium">
-          <a href="/" className="hover:text-white transition">Home</a>
-          <a href="/faq" className="hover:text-white transition">FAQ</a>
-          <a href="/terms" className="hover:text-white transition">Terms</a>
+          <Link href="/dashboard" className="hover:text-white transition">Home</Link>
+          <Link href="/faq" className="hover:text-white transition">FAQ</Link>
+          <Link href="/terms" className="hover:text-white transition">Terms</Link>
         </nav>
         <div className="flex space-x-4">
-          <a href="/login" className="px-4 py-2 text-sm text-white border border-white/20 rounded hover:bg-white/10 transition">
+          <Link href="/login" className="px-4 py-2 text-sm text-white border border-white/20 rounded hover:bg-white/10 transition">
             Login
-          </a>
-          <a href="/signup" className="px-4 py-2 text-sm text-black bg-white rounded hover:bg-gray-200 transition">
+          </Link>
+          <Link href="/signup" className="px-4 py-2 text-sm text-black bg-white rounded hover:bg-gray-200 transition">
             Sign Up
-          </a>
+          </Link>
         </div>
       </header>
 
@@ -118,7 +121,7 @@ export default function Home() {
 
       {/* Footer Note */}
       <div className="text-center text-sm sm:text-base text-purple-300 font-light mt-16 px-4 sm:px-0">
-        kya dekhraha hein bey, it's end of the website — enter your prompt in the box.
+        kya dekhraha hein bey, it&apos;s end of the website — enter your prompt in the box.
       </div>
 
       <footer className="w-full text-center text-white/70 text-sm py-8 border-t border-white/10 mt-10 px-4 sm:px-0">
