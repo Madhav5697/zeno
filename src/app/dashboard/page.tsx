@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import HeroSection from '../hero/Hero';
 import Link from 'next/link';
 
-// ✅ moved outside for useEffect safety
 const phrases = ['Enter your prompt here...', 'Enter your text here...'];
 
 export default function Dashboard() {
@@ -110,7 +109,9 @@ export default function Dashboard() {
         >
           <div className="glow-border animate-popup transition duration-500 ease-in-out">
             <div className="glow-inner transition-transform duration-300 ease-out">
-              <h2 className="text-4xl sm:text-5xl font-bold text-center mb-10 animate-fade-up">Refine Your Prompt</h2>
+              <h2 className="text-2xl sm:text-3xl font-semibold text-center text-purple-400 mb-10 animate-fade-up">
+                Seriously bro, you can&apos;t even write your own prompt? You&apos;re cooked. Anyway, enter your vague prompt in the box below.
+              </h2>
 
               <form className="relative space-y-6" onSubmit={handleSubmit}>
                 {inputValue === '' && !isFocused && (
