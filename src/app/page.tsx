@@ -54,7 +54,7 @@ export default function Home() {
       {/* Header */}
       <header className="w-full px-4 sm:px-8 py-4 flex justify-between items-center bg-black/30 backdrop-blur-md fixed top-0 z-50 border-b border-white/10 animate-fade-down shadow-sm">
         <nav className="flex space-x-4 sm:space-x-6 text-white/80 text-sm font-medium">
-          <Link href="/dashboard" className="hover:text-white">Home</Link>
+          <Link href="/" className="hover:text-white">Home</Link>
           <Link href="/faq" className="hover:text-white">FAQ</Link>
           <Link href="/terms" className="hover:text-white">Terms</Link>
         </nav>
