@@ -1,101 +1,135 @@
-import Image from "next/image";
+'use client';
+
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import HeroSection from './hero/Hero';
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const [inputValue, setInputValue] = useState('');
+  const [placeholderText, setPlaceholderText] = useState('');
+  const [isFocused, setIsFocused] = useState(false);
+  const router = useRouter();
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
+  const phrases = ['Enter your prompt here...', 'Enter your text here...'];
+
+  useEffect(() => {
+    if (isFocused) return;
+    let index = 0;
+    let subIndex = 0;
+    let isDeleting = false;
+
+    const interval = setInterval(() => {
+      const currentPhrase = phrases[index];
+
+      if (isDeleting) {
+        setPlaceholderText(currentPhrase.substring(0, subIndex - 1));
+        subIndex--;
+        if (subIndex === 0) {
+          isDeleting = false;
+          index = (index + 1) % phrases.length;
+        }
+      } else {
+        setPlaceholderText(currentPhrase.substring(0, subIndex + 1));
+        subIndex++;
+        if (subIndex === currentPhrase.length) {
+          isDeleting = true;
+        }
+      }
+    }, 100);
+
+    return () => clearInterval(interval);
+  }, [isFocused]);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!inputValue.trim()) return;
+    const encodedPrompt = encodeURIComponent(inputValue);
+    router.push(`/clarify?prompt=${encodedPrompt}`);
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-black to-[#111111] text-white">
+      {/* Header */}
+      <header className="w-full px-6 sm:px-12 py-5 flex justify-between items-center bg-black/30 backdrop-blur-md fixed top-0 z-50 border-b border-white/10 animate-fade-down shadow-sm transition-all duration-700">
+        <nav className="flex space-x-6 text-white/80 text-sm font-medium">
+          <a href="/" className="hover:text-white transition">Home</a>
+          <a href="/faq" className="hover:text-white transition">FAQ</a>
+          <a href="/terms" className="hover:text-white transition">Terms</a>
+        </nav>
+        <div className="flex space-x-4">
+          <a href="/login" className="px-4 py-2 text-sm text-white border border-white/20 rounded hover:bg-white/10 transition">
+            Login
           </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
+          <a href="/signup" className="px-4 py-2 text-sm text-black bg-white rounded hover:bg-gray-200 transition">
+            Sign Up
           </a>
         </div>
+      </header>
+
+      {/* Hero */}
+      <HeroSection />
+
+      {/* Prompt Box with Glow and Tilt */}
+      <main className="flex flex-col items-center justify-center px-6 sm:px-10 pb-32 pt-10">
+        <div
+          className="max-w-4xl w-full"
+          onMouseMove={(e) => {
+            const card = e.currentTarget.querySelector('.glow-inner') as HTMLDivElement;
+            const rect = e.currentTarget.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            const rotateX = ((y - centerY) / centerY) * 6;
+            const rotateY = ((x - centerX) / centerX) * -6;
+            card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.01)`;
+          }}
+          onMouseLeave={(e) => {
+            const card = e.currentTarget.querySelector('.glow-inner') as HTMLDivElement;
+            card.style.transform = `rotateX(0deg) rotateY(0deg) scale(1)`;
+          }}
+        >
+          <div className="glow-border animate-popup transition duration-500 ease-in-out">
+            <div className="glow-inner transition-transform duration-300 ease-out">
+              <h2 className="text-4xl sm:text-5xl font-bold text-center mb-10 animate-fade-up">Refine Your Prompt</h2>
+
+              <form className="relative space-y-6" onSubmit={handleSubmit}>
+                {inputValue === '' && !isFocused && (
+                  <span className="absolute top-[18px] left-[24px] text-white/50 pointer-events-none z-10">
+                    {placeholderText}<span className="animate-pulse">|</span>
+                  </span>
+                )}
+                <textarea
+                  rows={10}
+                  value={inputValue}
+                  onFocus={() => setIsFocused(true)}
+                  onBlur={() => setIsFocused(false)}
+                  onChange={(e) => setInputValue(e.target.value)}
+                  className="glass-input h-[50vh] pt-5 relative z-20"
+                />
+                <button type="submit" className="glass-button gradient-button">
+                  Submit
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
+
+      {/* Footer Note */}
+      <div className="text-center text-sm sm:text-base text-purple-300 font-light mt-16 px-4 sm:px-0">
+        kya dekhraha hein bey, it's end of the website — enter your prompt in the box.
+      </div>
+
+      <footer className="w-full text-center text-white/70 text-sm py-8 border-t border-white/10 mt-10 px-4 sm:px-0">
+        <p className="mb-2">Made by <span className="text-white font-medium">Madhav Ariaktota</span></p>
         <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
+          href="https://instagram.com/madhavarikatota"
           target="_blank"
           rel="noopener noreferrer"
+          className="hover:text-white transition"
         >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
+          @madhavarikatota
         </a>
       </footer>
     </div>

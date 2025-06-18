@@ -1,26 +1,148 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --color-bg: #000000;
+  --color-fg: #ffffff;
+  --color-accent: #999999;
+  --font-sans: system-ui, sans-serif;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+@layer components {
+  .glow-border {
+    @apply relative p-[2px] rounded-2xl;
+    background: linear-gradient(270deg, #ff6ec4, #7873f5, #5eead4, #ff6ec4);
+    background-size: 600% 600%;
+    animation: border-shine 6s linear infinite;
+    z-index: 0;
+  }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  .glow-inner {
+    @apply rounded-2xl bg-black backdrop-blur-md p-8 relative z-10;
+  }
+
+  .glow-inner::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg, rgba(255, 255, 255, 0.08), transparent);
+    mix-blend-mode: screen;
+    pointer-events: none;
+    z-index: 20;
+    border-radius: inherit;
+    transition: background 0.4s ease;
+  }
+
+  .glow-inner:hover::after {
+    background: linear-gradient(130deg, rgba(255, 255, 255, 0.15), transparent);
+  }
+
+  .glass-container {
+    @apply max-w-2xl mx-auto p-6 rounded-2xl bg-[var(--color-bg)] backdrop-blur-md shadow-lg text-[var(--color-fg)] font-sans relative;
+  }
+
+  .glass-input {
+    @apply w-full p-5 rounded-md bg-white/5 text-white outline-none focus:ring-2 focus:ring-[var(--color-accent)] resize-none transition-all duration-300 ease-in-out focus:scale-[1.01] focus:shadow-lg;
+  }
+
+  .glass-button {
+    @apply mt-4 w-full py-3 rounded-lg text-white font-semibold shadow-md transition-all duration-300 relative overflow-hidden z-10 bg-black;
+  }
+
+  .gradient-button::before {
+    content: '';
+    @apply absolute top-0 left-0 h-full;
+    width: 0%;
+    background: linear-gradient(90deg, #ff6ec4, #7873f5, #5eead4);
+    background-size: 200% 200%;
+    transition: width 0.5s ease-in-out;
+    z-index: -1;
+    border-radius: 0.5rem;
+  }
+
+  .gradient-button:hover::before,
+  .gradient-button:focus::before {
+    width: 100%;
+  }
+
+  .blob {
+    @apply absolute top-[-100px] left-[-100px] w-[400px] h-[400px] bg-gray-800 rounded-full opacity-20 blur-3xl z-0;
+    animation: blob-move 20s infinite ease-in-out;
+  }
+
+  .animate-fade-down {
+    animation: fade-down 0.7s ease-out both;
+  }
+
+  .animate-fade-in {
+    animation: fade-in 0.5s ease-out both;
+  }
+
+  .animate-popup {
+    animation: popup 0.3s ease-out forwards;
+  }
+
+  .animate-fade-up {
+    animation: fade-up 1s ease-out forwards;
+  }
+
+  .animate-blob {
+    animation: blob 15s ease-in-out infinite;
+  }
+
+  .animate-pulse {
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+
+  .animate-blink {
+    animation: blink 1s steps(2, start) infinite;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@keyframes border-shine {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes blob-move {
+  0% { transform: translate(0px, 0px) scale(1); }
+  33% { transform: translate(30px, -50px) scale(1.1); }
+  66% { transform: translate(-20px, 20px) scale(0.9); }
+  100% { transform: translate(0px, 0px) scale(1); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-down {
+  0% { opacity: 0; transform: translateY(-20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-up {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes popup {
+  0% { opacity: 0; transform: translateY(20px) scale(0.95); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes blob {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); }
+  50% { transform: translate(-50%, -50%) scale(1.1); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+@keyframes blink {
+  0% { opacity: 1; }
+  50% { opacity: 0; }
+  100% { opacity: 1; }
 }
