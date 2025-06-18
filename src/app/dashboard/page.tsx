@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import HeroSection from './hero/Hero';
+import HeroSection from '../hero/Hero';
 
-export default function Home() {
+export default function Dashboard() {
   const [inputValue, setInputValue] = useState('');
   const [placeholderText, setPlaceholderText] = useState('');
   const [isFocused, setIsFocused] = useState(false);
@@ -43,33 +43,48 @@ export default function Home() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!inputValue.trim()) return;
+
+    const previousRaw = JSON.parse(localStorage.getItem('prompt_history') || '[]');
+
+    const previous = previousRaw.map((item: any) => {
+      if (typeof item === 'string') {
+        return {
+          original: item,
+          refined: `Refined: ${item.trim().replace(/a ai/g, 'an AI')}`,
+        };
+      }
+      return item;
+    });
+
+    const newEntry = {
+      original: inputValue,
+      refined: `Refined: ${inputValue.trim().replace(/a ai/g, 'an AI')}`,
+    };
+
+    const updated = [newEntry, ...previous].slice(0, 20);
+    localStorage.setItem('prompt_history', JSON.stringify(updated));
+
     const encodedPrompt = encodeURIComponent(inputValue);
     router.push(`/clarify?prompt=${encodedPrompt}`);
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-black to-[#111111] text-white">
-      {/* Header */}
       <header className="w-full px-6 sm:px-12 py-5 flex justify-between items-center bg-black/30 backdrop-blur-md fixed top-0 z-50 border-b border-white/10 animate-fade-down shadow-sm transition-all duration-700">
         <nav className="flex space-x-6 text-white/80 text-sm font-medium">
-          <a href="/" className="hover:text-white transition">Home</a>
+          <a href="/dashboard" className="hover:text-white transition">Home</a>
           <a href="/faq" className="hover:text-white transition">FAQ</a>
           <a href="/terms" className="hover:text-white transition">Terms</a>
+          <a href="/history" className="hover:text-white transition font-semibold">History</a>
         </nav>
-        <div className="flex space-x-4">
-          <a href="/login" className="px-4 py-2 text-sm text-white border border-white/20 rounded hover:bg-white/10 transition">
-            Login
-          </a>
-          <a href="/signup" className="px-4 py-2 text-sm text-black bg-white rounded hover:bg-gray-200 transition">
-            Sign Up
-          </a>
+
+        <div className="text-white text-sm font-medium">
+          Welcome, <span className="font-semibold text-purple-400">Madhav</span>
         </div>
       </header>
 
-      {/* Hero */}
       <HeroSection />
 
-      {/* Prompt Box with Glow and Tilt */}
       <main className="flex flex-col items-center justify-center px-6 sm:px-10 pb-32 pt-10">
         <div
           className="max-w-4xl w-full"
@@ -116,7 +131,6 @@ export default function Home() {
         </div>
       </main>
 
-      {/* Footer Note */}
       <div className="text-center text-sm sm:text-base text-purple-300 font-light mt-16 px-4 sm:px-0">
         kya dekhraha hein bey, it's end of the website — enter your prompt in the box.
       </div>
