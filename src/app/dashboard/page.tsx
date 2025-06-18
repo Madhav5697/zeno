@@ -13,6 +13,8 @@ const supabase = createClient(
 
 const phrases = ['Enter your prompt here...', 'Enter your text here...'];
 
+type PromptItem = string | { original: string; refined: string };
+
 export default function Dashboard() {
   const [inputValue, setInputValue] = useState('');
   const [placeholderText, setPlaceholderText] = useState('');
@@ -64,7 +66,7 @@ export default function Dashboard() {
 
     const previousRaw = JSON.parse(localStorage.getItem('prompt_history') || '[]');
 
-    const previous = (previousRaw as any[]).map((item) => {
+    const previous = (previousRaw as PromptItem[]).map((item) => {
       if (typeof item === 'string') {
         return {
           original: item,
@@ -104,7 +106,7 @@ export default function Dashboard() {
       {/* Hero */}
       <HeroSection />
 
-      {/* Prompt Box with Animation */}
+      {/* Prompt Box */}
       <main className="flex flex-col items-center justify-center px-4 sm:px-10 pt-24 sm:pt-32 pb-24 sm:pb-36">
         <div
           className="max-w-4xl w-full mx-2 sm:mx-0"
@@ -145,12 +147,11 @@ export default function Dashboard() {
                   className="glass-input min-h-[200px] sm:h-[50vh] pt-4 sm:pt-5 relative z-20 w-full"
                 />
                 <button
-  type="submit"
-  className="glass-button gradient-button w-full sm:w-full py-3 sm:py-4 text-base sm:text-lg font-semibold text-white text-center"
->
-  Submit
-</button>
-
+                  type="submit"
+                  className="glass-button gradient-button w-full sm:w-full py-3 sm:py-4 text-base sm:text-lg font-semibold text-white text-center"
+                >
+                  Submit
+                </button>
               </form>
             </div>
           </div>
