@@ -52,7 +52,7 @@ export default function HistoryPage() {
 
         {/* Broke Message */}
         <div className="text-center text-sm text-purple-300 font-light mt-16 px-4 sm:px-0 italic">
-          I am broke asf, can't afford a database to store history. Peace out ✌️
+          I am broke asf, cannot afford a database to store history. Peace out ✌️
         </div>
       </main>
 
